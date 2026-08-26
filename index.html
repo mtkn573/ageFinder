@@ -60,7 +60,15 @@
         <img id="changeLanguage" src="polandFlag.jpg" style="cursor: pointer;">
     </div>
     <script>
-        document.getElementById(`changeLanguage`).addEventListener(`click`, function () {
+        isAndroid=/Android/i.test(navigator.userAgent)
+        if(!isAndroid){
+            document.body.innerHTML="korzystanie z apki chyba jest możliwe na urządzeniach z systemem android.<br><br>using app is i guess available on devices with android system."
+            document.body.style.fontSize="30px"
+            document.body.style.display="flex"
+            document.body.style.justifyContent="center"
+            document.body.style.alignItems="center"
+        }else{
+            document.getElementById(`changeLanguage`).addEventListener(`click`, function () {
             if (document.getElementById(`changeLanguage`).src.includes(`polandFlag.jpg`)) {
                 document.getElementById(`changeLanguage`).src = `unitedStatesFlag.jpg`
                 document.getElementById(`label`).textContent = `Wpisz datę urodzenia:`
@@ -83,103 +91,104 @@
                 localStorage.setItem('language', 'en');
                 calculateAge()
             }
-        })
-        arrowY = 0
-        direction = 1
-        maxY = 10
-        minY = -100
+            })
+            arrowY = 0
+            direction = 1
+            maxY = 10
+            minY = -100
 
-        function animateArrow() {
-            canvas = document.getElementById("canvas")
-            contex = canvas.getContext("2d")
-            arrow = document.getElementById("arrow")
-            contex.clearRect(0, 0, canvas.width, canvas.height);
-            if (arrow.complete && arrow.naturalWidth != 0) {
-                contex.drawImage(arrow, 0, arrowY);
+            function animateArrow() {
+                canvas = document.getElementById("canvas")
+                contex = canvas.getContext("2d")
+                arrow = document.getElementById("arrow")
+                contex.clearRect(0, 0, canvas.width, canvas.height);
+                if (arrow.complete && arrow.naturalWidth != 0) {
+                    contex.drawImage(arrow, 0, arrowY);
+                }
+                arrowY += direction * 2
+                if (arrowY >= maxY || arrowY <= minY) {
+                    direction *= -1
+                }
+                requestAnimationFrame(animateArrow)
             }
-            arrowY += direction * 2
-            if (arrowY >= maxY || arrowY <= minY) {
-                direction *= -1
-            }
-            requestAnimationFrame(animateArrow)
-        }
 
-        window.addEventListener("DOMContentLoaded", function () {
-            const savedLang = localStorage.getItem('language');
-            if (savedLang === 'pl') {
-                document.getElementById(`changeLanguage`).src = `unitedStatesFlag.jpg`;
-                document.getElementById(`label`).textContent = `Wpisz datę urodzenia:`;
-                document.getElementById(`language`).textContent = `Język:`;
-                document.documentElement.setAttribute(`lang`, `pl`);
-                document.getElementById(`age`).textContent = "Nieprawidłowa data.";
-            } else {
-                document.getElementById(`changeLanguage`).src = `polandFlag.jpg`;
-                document.getElementById(`label`).textContent = `Type birthday date:`;
-                document.getElementById(`language`).textContent = `Language:`;
-                document.getElementById(`age`).textContent = "Invalid date.";
-                document.documentElement.setAttribute(`lang`, `en`);
-            }
-            arrow = document.getElementById("arrow")
-            if (arrow.complete && arrow.naturalWidth != 0) {
-                animateArrow()
-            } else {
-                arrow.addEventListener("load", function () {
+            window.addEventListener("DOMContentLoaded", function () {
+                const savedLang = localStorage.getItem('language');
+                if (savedLang === 'pl') {
+                    document.getElementById(`changeLanguage`).src = `unitedStatesFlag.jpg`;
+                    document.getElementById(`label`).textContent = `Wpisz datę urodzenia:`;
+                    document.getElementById(`language`).textContent = `Język:`;
+                    document.documentElement.setAttribute(`lang`, `pl`);
+                    document.getElementById(`age`).textContent = "Nieprawidłowa data.";
+                } else {
+                    document.getElementById(`changeLanguage`).src = `polandFlag.jpg`;
+                    document.getElementById(`label`).textContent = `Type birthday date:`;
+                    document.getElementById(`language`).textContent = `Language:`;
+                    document.getElementById(`age`).textContent = "Invalid date.";
+                    document.documentElement.setAttribute(`lang`, `en`);
+                }
+                arrow = document.getElementById("arrow")
+                if (arrow.complete && arrow.naturalWidth != 0) {
                     animateArrow()
-                })
-            }
-        })
-        function calculateAge() {
-            let birthDate = new Date(document.getElementById("date").value);
-            if (birthDate.toString() === "Invalid Date") {
+                } else {
+                    arrow.addEventListener("load", function () {
+                        animateArrow()
+                    })
+                }
+            })
+            function calculateAge() {
+                let birthDate = new Date(document.getElementById("date").value);
+                if (birthDate.toString() === "Invalid Date") {
+                    if (document.documentElement.lang == 'en') {
+                        document.getElementById("age").textContent = "Invalid date.";
+                    }
+                    else {
+                        document.getElementById("age").textContent = "Nieprawidłowa data.";
+                    }
+                    return;
+                }
+                let today = new Date();
+                let years = today.getFullYear() - birthDate.getFullYear();
+                let months = today.getMonth() - birthDate.getMonth();
+                let days = today.getDate() - birthDate.getDate();
+                if (days < 0) {
+                    months--;
+                    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+                }
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
                 if (document.documentElement.lang == 'en') {
-                    document.getElementById("age").textContent = "Invalid date.";
+                    document.getElementById("age").textContent = `Calculated age is I guess ${years} years and I guess ${months} months and I guess ${days} days.`;
                 }
                 else {
-                    document.getElementById("age").textContent = "Nieprawidłowa data.";
+                    document.getElementById("age").textContent = `Obliczony wiek to chyba ${years} lat i chyba ${months} miesiące i chyba ${days} dni.`
                 }
-                return;
             }
-            let today = new Date();
-            let years = today.getFullYear() - birthDate.getFullYear();
-            let months = today.getMonth() - birthDate.getMonth();
-            let days = today.getDate() - birthDate.getDate();
-            if (days < 0) {
-                months--;
-                days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+
+            document.getElementById("date").addEventListener("change", calculateAge);
+
+            function setMidnightInterval() {
+                function calculateNextMidnight() {
+                    let now = new Date();
+                    let midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+                    return midnight - now;
+                }
+
+                function setDailyInterval() {
+                    const timeToMidnight = calculateNextMidnight();
+                    setTimeout(function () {
+                        calculateAge();
+                        setDailyInterval();
+                    }, timeToMidnight);
+                }
+
+                setDailyInterval();
             }
-            if (months < 0) {
-                years--;
-                months += 12;
-            }
-            if (document.documentElement.lang == 'en') {
-                document.getElementById("age").textContent = `Calculated age is I guess ${years} years and I guess ${months} months and I guess ${days} days.`;
-            }
-            else {
-                document.getElementById("age").textContent = `Obliczony wiek to chyba ${years} lat i chyba ${months} miesiące i chyba ${days} dni.`
-            }
+
+            setMidnightInterval();
         }
-
-        document.getElementById("date").addEventListener("change", calculateAge);
-
-        function setMidnightInterval() {
-            function calculateNextMidnight() {
-                let now = new Date();
-                let midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-                return midnight - now;
-            }
-
-            function setDailyInterval() {
-                const timeToMidnight = calculateNextMidnight();
-                setTimeout(function () {
-                    calculateAge();
-                    setDailyInterval();
-                }, timeToMidnight);
-            }
-
-            setDailyInterval();
-        }
-
-        setMidnightInterval();
     </script>
 </body>
 
