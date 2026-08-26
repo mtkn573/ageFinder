@@ -51,12 +51,12 @@
     <img id="arrow" src="arrow.png" style="display: none;">
     <canvas id="canvas" width="350%" height="570px"></canvas>
     <div style="display: flex; flex-direction: column;justify-content: flex-end;">
-        <div id="label">Type birthday date:</div>
+        <div id="label">type birthday date:</div>
         <input id="date" type="date" style="text-align: center;">
-        <div id="age" style="width: 200%;">Invalid date.</div>
+        <div id="age" style="width: 200%;">invalid date.</div>
     </div>
     <div style="position: fixed; bottom: 0;left: 0;width: 3%;">
-        <div id="language">Language.</div>
+        <div id="language">language.</div>
         <img id="changeLanguage" src="polandFlag.jpg" style="cursor: pointer;">
     </div>
     <script>
@@ -71,10 +71,10 @@
             document.getElementById(`changeLanguage`).addEventListener(`click`, function () {
             if (document.getElementById(`changeLanguage`).src.includes(`polandFlag.jpg`)) {
                 document.getElementById(`changeLanguage`).src = `unitedStatesFlag.jpg`
-                document.getElementById(`label`).textContent = `Wpisz datę urodzenia:`
-                document.getElementById(`language`).textContent = `Język:`
-                if (document.getElementById(`age`).textContent == "Invalid date.") {
-                    document.getElementById(`age`).textContent = "Nieprawidłowa data."
+                document.getElementById(`label`).textContent = `wpisz datę urodzenia:`
+                document.getElementById(`language`).textContent = `język.`
+                if (document.getElementById(`age`).textContent == "invalid date.") {
+                    document.getElementById(`age`).textContent = "nieprawidłowa data."
                 }
                 document.documentElement.setAttribute(`lang`, `pl`);
                 localStorage.setItem('language', 'pl');
@@ -82,10 +82,10 @@
             }
             else {
                 document.getElementById(`changeLanguage`).src = `polandFlag.jpg`
-                document.getElementById(`label`).textContent = `Type birthday date:`
-                document.getElementById(`language`).textContent = `Language:`
-                if (document.getElementById(`age`).textContent == "Nieprawidłowa data.") {
-                    document.getElementById(`age`).textContent = "Invalid date."
+                document.getElementById(`label`).textContent = `type birthday date:`
+                document.getElementById(`language`).textContent = `language.`
+                if (document.getElementById(`age`).textContent == "nieprawidłowa data.") {
+                    document.getElementById(`age`).textContent = "invalid date."
                 }
                 document.documentElement.setAttribute(`lang`, `en`);
                 localStorage.setItem('language', 'en');
@@ -116,15 +116,15 @@
                 const savedLang = localStorage.getItem('language');
                 if (savedLang === 'pl') {
                     document.getElementById(`changeLanguage`).src = `unitedStatesFlag.jpg`;
-                    document.getElementById(`label`).textContent = `Wpisz datę urodzenia:`;
-                    document.getElementById(`language`).textContent = `Język:`;
+                    document.getElementById(`label`).textContent = `wpisz datę urodzenia:`;
+                    document.getElementById(`language`).textContent = `język.`;
                     document.documentElement.setAttribute(`lang`, `pl`);
-                    document.getElementById(`age`).textContent = "Nieprawidłowa data.";
+                    document.getElementById(`age`).textContent = "nieprawidłowa data.";
                 } else {
                     document.getElementById(`changeLanguage`).src = `polandFlag.jpg`;
-                    document.getElementById(`label`).textContent = `Type birthday date:`;
-                    document.getElementById(`language`).textContent = `Language:`;
-                    document.getElementById(`age`).textContent = "Invalid date.";
+                    document.getElementById(`label`).textContent = `type birthday date:`;
+                    document.getElementById(`language`).textContent = `language.`;
+                    document.getElementById(`age`).textContent = "invalid date.";
                     document.documentElement.setAttribute(`lang`, `en`);
                 }
                 arrow = document.getElementById("arrow")
@@ -140,10 +140,10 @@
                 let birthDate = new Date(document.getElementById("date").value);
                 if (birthDate.toString() === "Invalid Date") {
                     if (document.documentElement.lang == 'en') {
-                        document.getElementById("age").textContent = "Invalid date.";
+                        document.getElementById("age").textContent = "invalid date.";
                     }
                     else {
-                        document.getElementById("age").textContent = "Nieprawidłowa data.";
+                        document.getElementById("age").textContent = "nieprawidłowa data.";
                     }
                     return;
                 }
@@ -160,10 +160,10 @@
                     months += 12;
                 }
                 if (document.documentElement.lang == 'en') {
-                    document.getElementById("age").textContent = `Calculated age is I guess ${years} years and I guess ${months} months and I guess ${days} days.`;
+                    document.getElementById("age").textContent = `calculated age is i guess ${years} years and i guess ${months} months and i guess ${days} days.`;
                 }
                 else {
-                    document.getElementById("age").textContent = `Obliczony wiek to chyba ${years} lat i chyba ${months} miesiące i chyba ${days} dni.`
+                    document.getElementById("age").textContent = `obliczony wiek to chyba ${years} lat i chyba ${months} miesiące i chyba ${days} dni.`
                 }
             }
 
